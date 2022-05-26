@@ -1,0 +1,229 @@
+#:import Factory kivy.factory.Factory
+
+WindowManager:
+    FirstWindow:
+        name: "first"
+        on_pre_enter: root.start()
+        CoverImage:
+            source: "images/tictactoemain.jpg"
+            canvas:
+                Color:
+                    rgba: 0, 0, 0, .2
+                Rectangle:
+                    pos: self.pos
+                    size: self.size
+
+        FloatLayout:
+            id: float
+            padding: dp(10)
+            spacing: dp(15)
+            MyText:
+                id: player1
+                hint_text: "PLAYER1 ENTER NAME"
+                pos_hint: {"x":.05, "y":.85}
+
+            MyText:
+                id: player2
+                hint_text: "PLAYER2 ENTER NAME"
+                pos_hint: {"x":.05, "y":.75}
+
+            MDRaisedButton:
+                text: "Toss"
+                size_hint:(.33, .09)
+                pos_hint:{"x": .325, "y":.04}
+                font_size: dp(44)
+                on_press: Factory.ErrorPopup().open() if player1.text == "" or player2.text == "" else root.toss_me()
+                on_release: Factory.MyPopup().open() if player1.text != "" and player2.text != "" else print("")
+
+    SecondWindow:
+        name:"second"
+        on_enter: root.update_score()
+        CoverImage:
+            source: "images/fourth.jpg"
+            canvas:
+                Color:
+                    rgba: 0, 0, 0, .6
+                Rectangle:
+                    pos: self.pos
+                    size: self.size
+        BoxLayout:
+            id: box
+            orientation: "vertical"
+            size: root.width, root.height
+            GridLayout:
+                cols:2
+                rows:2
+                padding:25
+                spacing: 2
+                size_hint: 1, .3
+
+                Label:
+                    text: root.first_player
+                    halign: "left"
+                    font_size:"46dp"
+                TextInput:
+                    size_hint_x: None
+                    width: 80
+                    font_size:"40dp"
+                    id: score1
+                    halign: "center"
+
+                Label:
+                    text: root.second_player
+                    halign: "left"
+                    font_size:"46dp"
+                TextInput:
+                    size_hint_x: None
+                    width: 80
+                    font_size:"40dp"
+                    id: score2
+                    halign: "center"
+
+            Label:
+                id: label1
+                font_size: dp(38)
+                size: self.size
+                halign: "right"
+                text_size: root.width, None
+                text: "{} is X and plays first".format(root.x_player)
+                size_hint: .6,.1
+
+            GridLayout:
+                spacing: dp(3)
+                padding: dp(3)
+                cols:3
+                rows:3
+                TicTacToeButton:
+                    id:btn1
+                    on_press: btn1.text = root.mark_me()
+                    on_release: Factory.GamePopup().open() if root.check_if_winner() else root.check_if_tie()
+
+                TicTacToeButton:
+                    id:btn2
+                    on_press: btn2.text = root.mark_me()
+                    on_release: Factory.GamePopup().open() if root.check_if_winner() else root.check_if_tie()
+
+                TicTacToeButton:
+                    id:btn3
+                    on_press: btn3.text = root.mark_me()
+                    on_release: Factory.GamePopup().open() if root.check_if_winner() else root.check_if_tie()
+
+                TicTacToeButton:
+                    id:btn4
+                    on_press: btn4.text = root.mark_me()
+                    on_release: Factory.GamePopup().open() if root.check_if_winner() else root.check_if_tie()
+
+                TicTacToeButton:
+                    id:btn5
+                    on_press: btn5.text = root.mark_me()
+                    on_release: Factory.GamePopup().open() if root.check_if_winner() else root.check_if_tie()
+
+                TicTacToeButton:
+                    id:btn6
+                    on_press: btn6.text = root.mark_me()
+                    on_release: Factory.GamePopup().open() if root.check_if_winner() else root.check_if_tie()
+
+                TicTacToeButton:
+                    id:btn7
+                    on_press: btn7.text = root.mark_me()
+                    on_release: Factory.GamePopup().open() if root.check_if_winner() else root.check_if_tie()
+
+                TicTacToeButton:
+                    id:btn8
+                    on_press: btn8.text = root.mark_me()
+                    on_release: Factory.GamePopup().open() if root.check_if_winner() else root.check_if_tie()
+
+                TicTacToeButton:
+                    id:btn9
+                    on_press: btn9.text = root.mark_me()
+                    on_release: Factory.GamePopup().open() if root.check_if_winner() else root.check_if_tie()
+
+            PopupButton:
+                text: "Back to start"
+                on_press: root.reset_all()
+                on_press: root.reset_score_players()
+                on_press: app.root.current="first"
+
+<TicTacToeButton@Button>
+    font_size: dp(120)
+    text:""
+    on_press: self.disabled=True
+
+<MyText@MDTextField>:
+    cursor_width: "3sp"
+    font_size: dp(46)
+    halign: "left"
+    write_tab: False
+    size_hint:(.6, .08)
+    multiline: False
+
+<MyPopup@Popup>
+    size_hint: (.5,.3)
+    title: "Tossing"
+    PopupBoxLayout:
+        PopupLabel:
+            id: label
+            text: f"{app.root.x_player} \nwon the toss"
+        PopupButton:
+            text: "Start"
+            on_press:
+                app.root.current="second"
+                app.root.animate_it(root.ids.label)
+                app.root.animate_me(root)
+
+<ErrorPopup@Popup>
+    size_hint: (.5,.3)
+    title: "Error"
+    PopupBoxLayout:
+        PopupLabel:
+            id: label
+            text: "Please enter name."
+        PopupButton:
+            text: "Back"
+            on_press: app.root.animate_me(root)
+
+<GamePopup@Popup>
+    auto_dismiss: False
+    size_hint: (.6,.4)
+    title: "Winner"
+    PopupBoxLayout:
+        PopupLabel:
+            text: f"{app.root.player_winner} won!!"
+        PopupButton:
+            text: "Play again"
+            on_press: app.root.reset_all()
+            on_release: root.dismiss()
+
+<TiePopup@Popup>
+    auto_dismiss: False
+    size_hint: (.6,.4)
+    title: "Tie!"
+    PopupBoxLayout:
+        PopupLabel:
+            text: "It is a tie! \nPlay again."
+        PopupButton:
+            text: "Play again"
+            on_press: app.root.reset_all()
+            on_release: root.dismiss()
+
+<CoverImage@CoverBehavior+Image>:
+    reference_size: self.texture_size
+
+<PopupLabel@Label>:
+    font_size: dp(30)
+    halign: "center"
+
+<PopupButton@MDTextButton>:
+    font_size: dp(35)
+    color: (1,1,1,1)
+    size_hint: (.4, .25)
+    pos_hint: {"center_x":.5}
+
+<PopupBoxLayout@BoxLayout>:
+    orientation: "vertical"
+    size: root.width, root.height
+    canvas.before:
+        Rectangle:
+            source: "images/fourth.jpg"
+            pos: self.pos
+            size: self.size
