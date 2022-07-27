@@ -72,147 +72,38 @@ class WindowManager(ScreenManager):
         self.load_sound('sounds/Alien-takeoff.wav')
 
     def mark_me(self):
-        if self.sign == "x":
-            self.sign = "o"
-        else:
-            self.sign = "x"
+        self.sign = "o" if self.sign == 'x' else 'x'
         return self.sign
 
-    def check_if_winner(self):
-        if self.ids.btn1.text == "x" and self.ids.btn2.text == "x" and self.ids.btn3.text == "x":
-            self.player_winner = self.x_player
-            if self.x_player == self.first_player:
-                self.first_player_score += 1
-            else:
-                self.second_player_score += 1
-            self.update_score()
-            return True
-        elif self.ids.btn4.text == "x" and self.ids.btn5.text == "x" and self.ids.btn6.text == "x":
-            self.player_winner = self.x_player
-            if self.x_player == self.first_player:
-                self.first_player_score += 1
-            else:
-                self.second_player_score += 1
-            self.update_score()
-            return True
-        elif self.ids.btn7.text == "x" and self.ids.btn8.text == "x" and self.ids.btn9.text == "x":
-            self.player_winner = self.x_player
-            if self.x_player == self.first_player:
-                self.first_player_score += 1
-            else:
-                self.second_player_score += 1
-            self.update_score()
-            return True
-        elif self.ids.btn1.text == "x" and self.ids.btn5.text == "x" and self.ids.btn9.text == "x":
-            self.player_winner = self.x_player
-            if self.x_player == self.first_player:
-                self.first_player_score += 1
-            else:
-                self.second_player_score += 1
-            self.update_score()
-            return True
-        elif self.ids.btn3.text == "x" and self.ids.btn5.text == "x" and self.ids.btn7.text == "x":
-            self.player_winner = self.x_player
-            if self.x_player == self.first_player:
-                self.first_player_score += 1
-            else:
-                self.second_player_score += 1
-            self.update_score()
-            return True
-        elif self.ids.btn1.text == "x" and self.ids.btn4.text == "x" and self.ids.btn7.text == "x":
-            self.player_winner = self.x_player
-            if self.x_player == self.first_player:
-                self.first_player_score += 1
-            else:
-                self.second_player_score += 1
-            self.update_score()
-            return True
-        elif self.ids.btn2.text == "x" and self.ids.btn5.text == "x" and self.ids.btn8.text == "x":
-            self.player_winner = self.x_player
-            if self.x_player == self.first_player:
-                self.first_player_score += 1
-            else:
-                self.second_player_score += 1
-            self.update_score()
-            return True
-        elif self.ids.btn3.text == "x" and self.ids.btn6.text == "x" and self.ids.btn9.text == "x":
-            self.player_winner = self.x_player
-            if self.x_player == self.first_player:
-                self.first_player_score += 1
-            else:
-                self.second_player_score += 1
-            self.update_score()
-            return True
+    @staticmethod
+    def check_values(*args):
+        control_value = args[0]
+        if all(arg == control_value for arg in args):
+            return control_value
+        return False
 
-        elif self.ids.btn1.text == "o" and self.ids.btn2.text == "o" and self.ids.btn3.text == "o":
-            self.player_winner = self.o_player
-            if self.o_player == self.first_player:
-                self.first_player_score += 1
-            else:
-                self.second_player_score += 1
-            self.update_score()
-            return True
-        elif self.ids.btn4.text == "o" and self.ids.btn5.text == "o" and self.ids.btn6.text == "o":
-            self.player_winner = self.o_player
-            if self.o_player == self.first_player:
-                self.first_player_score += 1
-            else:
-                self.second_player_score += 1
-            self.update_score()
-            return True
-        elif self.ids.btn7.text == "o" and self.ids.btn8.text == "o" and self.ids.btn9.text == "o":
-            self.player_winner = self.o_player
-            if self.o_player == self.first_player:
-                self.first_player_score += 1
-            else:
-                self.second_player_score += 1
-            self.update_score()
-            return True
-        elif self.ids.btn1.text == "o" and self.ids.btn5.text == "o" and self.ids.btn9.text == "o":
-            self.player_winner = self.o_player
-            if self.o_player == self.first_player:
-                self.first_player_score += 1
-            else:
-                self.second_player_score += 1
-            self.update_score()
-            return True
-        elif self.ids.btn3.text == "o" and self.ids.btn5.text == "o" and self.ids.btn7.text == "o":
-            self.player_winner = self.o_player
-            if self.o_player == self.first_player:
-                self.first_player_score += 1
-            else:
-                self.second_player_score += 1
-            self.update_score()
-            return True
-        elif self.ids.btn1.text == "o" and self.ids.btn4.text == "o" and self.ids.btn7.text == "o":
-            self.player_winner = self.o_player
-            if self.o_player == self.first_player:
-                self.first_player_score += 1
-            else:
-                self.second_player_score += 1
-            self.update_score()
-            return True
-        elif self.ids.btn2.text == "o" and self.ids.btn5.text == "o" and self.ids.btn8.text == "o":
-            self.player_winner = self.o_player
-            if self.o_player == self.first_player:
-                self.first_player_score += 1
-            else:
-                self.second_player_score += 1
-            self.update_score()
-            return True
-        elif self.ids.btn3.text == "o" and self.ids.btn6.text == "o" and self.ids.btn9.text == "o":
-            self.player_winner = self.o_player
-            if self.o_player == self.first_player:
-                self.first_player_score += 1
-            else:
-                self.second_player_score += 1
-            self.update_score()
-            return True
+    def check_if_winner(self):
+        combinations = [('btn1', 'btn2', 'btn3'), ('btn4', 'btn5', 'btn6'), ('btn7', 'btn8', 'btn9'),
+                        ('btn1', 'btn4', 'btn7'), ('btn2', 'btn5', 'btn8'), ('btn3', 'btn6', 'btn9'),
+                        ('btn1', 'btn5', 'btn9'), ('btn3', 'btn5', 'btn7')]
+        for comb in combinations:
+            field_one = self.ids[comb[0]].text
+            field_two = self.ids[comb[1]].text
+            field_three = self.ids[comb[2]].text
+            if all([field_one, field_two, field_three]) and self.check_values(field_one, field_two, field_three):
+                winner = self.ids[comb[0]].text
+                self.player_winner = eval(f'self.{winner}_player')
+                if eval(f'self.{winner}_player') == self.first_player:
+                    self.first_player_score += 1
+                else:
+                    self.second_player_score += 1
+                self.update_score()
+                return True
         return False
 
     def check_if_tie(self):
-        buttons = ["btn1", "btn2", "btn3", "btn4", "btn5", "btn6", "btn7", "btn8", "btn9"]
-        disabled = sum([1 for btn in buttons if self.ids[btn].disabled])
+        buttons = [widget for widget in self.ids.keys() if widget.startswith('btn')]
+        disabled = sum(1 for btn in buttons if self.ids[btn].disabled)
         if disabled == 9 and not self.check_if_winner():
             self.load_sound('sounds/tie.wav')
             Factory.TiePopup().open()
@@ -225,9 +116,10 @@ class WindowManager(ScreenManager):
         else:
             self.o_player = self.second_player
             self.x_player = self.first_player
-        for widget in self.ids.values():
-            widget.disabled = False
-            widget.text = ''
+        for name, widget in self.ids.items():
+            if name.startswith('btn'):
+                widget.disabled = False
+                widget.text = ''
         self.ids["label1"].text = f"{self.x_player} is X and plays first"
 
     def reset_score_players(self):
