@@ -225,25 +225,10 @@ class WindowManager(ScreenManager):
         else:
             self.o_player = self.second_player
             self.x_player = self.first_player
-        self.ids["btn1"].disabled = False
-        self.ids["btn2"].disabled = False
-        self.ids["btn3"].disabled = False
-        self.ids["btn4"].disabled = False
-        self.ids["btn5"].disabled = False
-        self.ids["btn6"].disabled = False
-        self.ids["btn7"].disabled = False
-        self.ids["btn8"].disabled = False
-        self.ids["btn9"].disabled = False
-        self.ids["btn1"].text = ""
-        self.ids["btn2"].text = ""
-        self.ids["btn3"].text = ""
-        self.ids["btn4"].text = ""
-        self.ids["btn5"].text = ""
-        self.ids["btn6"].text = ""
-        self.ids["btn7"].text = ""
-        self.ids["btn8"].text = ""
-        self.ids["btn9"].text = ""
-        self.ids["label1"].text = "{} is X and plays first".format(self.x_player)
+        for widget in self.ids.values():
+            widget.disabled = False
+            widget.text = ''
+        self.ids["label1"].text = f"{self.x_player} is X and plays first"
 
     def reset_score_players(self):
         self.first_player_score = 0
