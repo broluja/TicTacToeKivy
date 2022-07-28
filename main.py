@@ -29,7 +29,7 @@ class SecondWindow(MDScreen):
 
     def btn_create(self, time):
         if self.counter < 10:
-            btn = Button(on_press=lambda x: self.mark_me(x), font_size=dp(120), on_release=lambda x: self.check())
+            btn = Button(on_press=lambda z: self.mark_me(z), font_size=dp(120), on_release=lambda y: self.check())
             btn.opacity = 0  # Set the opacity of the button to 0
             self.manager.ids[f'btn{self.counter}'] = btn
             self.manager.ids.grid.add_widget(btn)  # Add the button
@@ -67,7 +67,7 @@ class WindowManager(ScreenManager):
     def load_sound(self, song):
         sound = self.sound_manager.load(song)
         sound.play()
-        sound.volume = 0.55
+        sound.volume = 0.5
 
     def start(self):
         self.load_sound('sounds/enter_game.wav')
@@ -153,7 +153,5 @@ class TicTacToe(MDApp):
         self.theme_cls.primary_palette = 'Orange'
 
 
-x = ['Red', 'Pink', 'Purple', 'DeepPurple', 'Indigo', 'Blue', 'LightBlue', 'Cyan', 'Teal', 'Green', 'LightGreen',
-     'Lime', 'Yellow', 'Amber', 'Orange', 'DeepOrange', 'Brown', 'Gray', 'BlueGray']
 if __name__ == "__main__":
     TicTacToe().run()
