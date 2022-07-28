@@ -1,44 +1,61 @@
 #:import Factory kivy.factory.Factory
 
+
+<LoginTextField@MDTextField>
+    multiline: False
+    write_tab: False
+    cursor_width: "3sp"
+    size_hint: None, None
+    width: dp(300)
+    font_size: dp(50)
+    line_color_focus: 0, 1, 0, 1
+    hint_text_color_normal: 1, 1, 1
+    line_color_normal: 1, 1, 1
+
+
 WindowManager:
     FirstWindow:
         name: "first"
-        on_pre_enter: root.start()
-        CoverImage:
+        FitImage:
             source: "images/tictactoemain.jpg"
             canvas.after:
                 Color:
-                    rgba: 0, 0, 0, .2
+                    rgba: 0, 0, 0, .4
                 Rectangle:
                     pos: self.pos
                     size: self.size
 
-        FloatLayout:
-            id: float
+        MDBoxLayout:
+            orientation: 'vertical'
             padding: dp(10)
             spacing: dp(15)
-            MyText:
+
+            LoginTextField:
                 id: player1
                 hint_text: "PLAYER1 ENTER NAME"
-                pos_hint: {"x":.05, "y":.85}
+                pos_hint: {'center_x': .5, 'top': .9}
 
-            MyText:
+
+            LoginTextField:
                 id: player2
                 hint_text: "PLAYER2 ENTER NAME"
-                pos_hint: {"x":.05, "y":.75}
-
-            MDRaisedButton:
-                text: "Toss"
-                size_hint:(.33, .09)
-                pos_hint:{"x": .325, "y":.04}
-                font_size: dp(44)
-                on_press: Factory.ErrorPopup().open() if player1.text == "" or player2.text == "" else root.toss_me()
-                on_release: Factory.MyPopup().open() if player1.text != "" and player2.text != "" else print("")
+                pos_hint: {'center_x': .5, 'top': .8}
+            MDBoxLayout:
+                orientation: 'vertical'
+                padding: dp(50)
+                MDRectangleFlatButton:
+                    text: 'Toss'
+                    font_size: dp(44)
+                    theme_text_color: "Custom"
+                    text_color: 1, 1, 1, .9
+                    pos_hint: {'center_x': .5, 'top': .2}
+                    on_press: Factory.ErrorPopup().open() if player1.text == "" or player2.text == "" else root.toss_me()
+                    on_release: Factory.MyPopup().open() if player1.text != "" and player2.text != "" else print("")
 
     SecondWindow:
         name:"second"
         on_enter: root.update_score()
-        CoverImage:
+        FitImage:
             source: "images/fourth.jpg"
             canvas:
                 Color:
@@ -144,18 +161,14 @@ WindowManager:
                 on_press: root.reset_score_players()
                 on_press: app.root.current="first"
 
+
 <TicTacToeButton@Button>
     font_size: dp(120)
     text:""
+    disabled_color: 0, 0, 0, .65
     on_press: self.disabled=True
 
-<MyText@MDTextField>:
-    cursor_width: "3sp"
-    font_size: dp(46)
-    halign: "left"
-    write_tab: False
-    size_hint:(.6, .08)
-    multiline: False
+
 
 <MyPopup@Popup>
     size_hint: (.5,.3)

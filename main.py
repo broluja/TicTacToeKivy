@@ -7,7 +7,7 @@ Config.set("graphics", "height", "950")
 
 from kivymd.app import MDApp
 from kivy.uix.screenmanager import Screen, ScreenManager
-from kivy.properties import StringProperty, NumericProperty, ObjectProperty
+from kivy.properties import StringProperty, NumericProperty
 from kivy.animation import Animation
 from kivy.factory import Factory
 from kivy.core.audio import SoundLoader
@@ -30,7 +30,6 @@ class WindowManager(ScreenManager):
     o_player = StringProperty("")
     sign = StringProperty("o")
     player_winner = StringProperty("")
-    sound_manager = ObjectProperty()
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -43,13 +42,12 @@ class WindowManager(ScreenManager):
         sound.volume = 0.55
 
     def start(self):
-        self.load_sound('sounds/returner.wav')
+        self.load_sound('sounds/enter_game.wav')
 
     def toss_me(self):
         self.first_player = self.ids["player1"].text
         self.second_player = self.ids["player2"].text
-        my_list = [self.first_player, self.second_player]
-        winner = random.choice(my_list)
+        winner = random.choice([self.first_player, self.second_player])
         self.x_player = str(winner)
         if self.x_player == self.first_player:
             self.o_player = str(self.second_player)
@@ -61,12 +59,12 @@ class WindowManager(ScreenManager):
 
     def animate_it(self, widget, *args):
         animate = Animation(color=(0, 0, 1, 0),
-                            pos=(.1, .1), duration=1)
+                            pos=(.1, .1), duration=.5)
         animate.start(widget)
         self.load_sound('sounds/Alien-takeoff.wav')
 
     def animate_me(self, widget, *args):
-        animate = Animation(opacity=0, duration=1)
+        animate = Animation(opacity=0, duration=.5)
         animate += Animation(size_hint=(.01, .01))
         animate.start(widget)
         self.load_sound('sounds/Alien-takeoff.wav')
@@ -103,8 +101,8 @@ class WindowManager(ScreenManager):
 
     def check_if_tie(self):
         buttons = [widget for widget in self.ids.keys() if widget.startswith('btn')]
-        disabled = sum(1 for btn in buttons if self.ids[btn].disabled)
-        if disabled == 9 and not self.check_if_winner():
+        disabled = [1 if self.ids[btn].disabled else 0 for btn in buttons]
+        if all(disabled) and not self.check_if_winner():
             self.load_sound('sounds/tie.wav')
             Factory.TiePopup().open()
 
