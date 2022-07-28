@@ -6,19 +6,47 @@ Config.set("graphics", "width", "700")
 Config.set("graphics", "height", "950")
 
 from kivymd.app import MDApp
-from kivy.uix.screenmanager import Screen, ScreenManager
+from kivymd.uix.screenmanager import ScreenManager
+from kivymd.uix.screen import MDScreen
 from kivy.properties import StringProperty, NumericProperty
+from kivy.uix.button import Button
 from kivy.animation import Animation
 from kivy.factory import Factory
 from kivy.core.audio import SoundLoader
+from kivy.clock import Clock
+from kivy.metrics import dp
 
 
-class FirstWindow(Screen):
+class FirstWindow(MDScreen):
     pass
 
 
-class SecondWindow(Screen):
-    pass
+class SecondWindow(MDScreen):
+    counter = 1
+
+    def on_enter(self, *args):
+        Clock.schedule_interval(self.btn_create, 0.27)
+
+    def btn_create(self, time):
+        if self.counter < 10:
+            btn = Button(on_press=lambda x: self.mark_me(x), font_size=dp(120), on_release=lambda x: self.check())
+            btn.opacity = 0  # Set the opacity of the button to 0
+            self.manager.ids[f'btn{self.counter}'] = btn
+            self.manager.ids.grid.add_widget(btn)  # Add the button
+            Animation(opacity=1, duration=.2).start(btn)  # Duration is < than clock duration
+            self.counter += 1
+
+    def check(self):
+        if self.manager.check_if_winner():
+            Factory.GamePopup().open()
+            return
+        self.manager.check_if_tie()
+
+    def mark_me(self, widget):
+        self.manager.sign = 'x' if self.manager.sign == 'o' else 'o'
+        widget.text = self.manager.sign
+        widget.disabled = True
+        widget.disabled_color = (0, 0, 0, .65)
 
 
 class WindowManager(ScreenManager):
@@ -28,8 +56,8 @@ class WindowManager(ScreenManager):
     second_player_score = NumericProperty(0)
     x_player = StringProperty("")
     o_player = StringProperty("")
-    sign = StringProperty("o")
     player_winner = StringProperty("")
+    sign = StringProperty('o')
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -48,18 +76,16 @@ class WindowManager(ScreenManager):
         self.first_player = self.ids["player1"].text
         self.second_player = self.ids["player2"].text
         winner = random.choice([self.first_player, self.second_player])
-        self.x_player = str(winner)
+        self.x_player = winner
         if self.x_player == self.first_player:
-            self.o_player = str(self.second_player)
+            self.o_player = self.second_player
         else:
-            self.o_player = str(self.first_player)
-
+            self.o_player = self.first_player
         self.start()
         return winner
 
     def animate_it(self, widget, *args):
-        animate = Animation(color=(0, 0, 1, 0),
-                            pos=(.1, .1), duration=.5)
+        animate = Animation(color=(0, 0, 1, 0), pos=(.1, .1), duration=.5)
         animate.start(widget)
         self.load_sound('sounds/Alien-takeoff.wav')
 
@@ -69,16 +95,11 @@ class WindowManager(ScreenManager):
         animate.start(widget)
         self.load_sound('sounds/Alien-takeoff.wav')
 
-    def mark_me(self):
-        self.sign = "o" if self.sign == 'x' else 'x'
-        return self.sign
-
     @staticmethod
     def check_values(*args):
         control_value = args[0]
         if all(arg == control_value for arg in args):
             return control_value
-        return False
 
     def check_if_winner(self):
         combinations = [('btn1', 'btn2', 'btn3'), ('btn4', 'btn5', 'btn6'), ('btn7', 'btn8', 'btn9'),
@@ -95,7 +116,6 @@ class WindowManager(ScreenManager):
                     self.first_player_score += 1
                 else:
                     self.second_player_score += 1
-                self.update_score()
                 return True
         return False
 
@@ -107,31 +127,24 @@ class WindowManager(ScreenManager):
             Factory.TiePopup().open()
 
     def reset_all(self):
-        self.sign = "o"
-        if self.x_player == self.first_player:
-            self.x_player = self.second_player
-            self.o_player = self.first_player
-        else:
-            self.o_player = self.second_player
-            self.x_player = self.first_player
         for name, widget in self.ids.items():
             if name.startswith('btn'):
                 widget.disabled = False
                 widget.text = ''
         self.ids["label1"].text = f"{self.x_player} is X and plays first"
+        self.sign = 'o'
+        if self.x_player == self.first_player:
+            self.x_player = self.second_player
+            self.o_player = self.first_player
+            return
+        self.o_player = self.second_player
+        self.x_player = self.first_player
 
     def reset_score_players(self):
         self.first_player_score = 0
         self.first_player = ""
         self.second_player_score = 0
         self.second_player = ""
-
-    def update_score(self):
-        self.ids["score1"].text = str(self.first_player_score)
-        self.ids["score2"].text = str(self.second_player_score)
-        self.ids["score1"].disabled = True
-        self.ids["score2"].disabled = True
-        self.load_sound('sounds/start.wav')
 
 
 class TicTacToe(MDApp):

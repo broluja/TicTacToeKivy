@@ -12,6 +12,12 @@
     hint_text_color_normal: 1, 1, 1
     line_color_normal: 1, 1, 1
 
+<ScoreLabel@MDLabel>
+    halign: 'left'
+    font_style: 'H3'
+    adaptive_height: True
+    color: 1,1,1
+
 
 WindowManager:
     FirstWindow:
@@ -29,17 +35,16 @@ WindowManager:
             orientation: 'vertical'
             padding: dp(10)
             spacing: dp(15)
-
             LoginTextField:
                 id: player1
                 hint_text: "PLAYER1 ENTER NAME"
                 pos_hint: {'center_x': .5, 'top': .9}
 
-
             LoginTextField:
                 id: player2
                 hint_text: "PLAYER2 ENTER NAME"
                 pos_hint: {'center_x': .5, 'top': .8}
+
             MDBoxLayout:
                 orientation: 'vertical'
                 padding: dp(50)
@@ -54,120 +59,42 @@ WindowManager:
 
     SecondWindow:
         name:"second"
-        on_enter: root.update_score()
         FitImage:
             source: "images/fourth.jpg"
-            canvas:
+            canvas.after:
                 Color:
-                    rgba: 0, 0, 0, .6
+                    rgba: 0, 0, 0, .3
                 Rectangle:
                     pos: self.pos
                     size: self.size
         BoxLayout:
-            id: box
             orientation: "vertical"
-            size: root.width, root.height
-            GridLayout:
-                cols:2
-                rows:2
-                padding:25
-                spacing: 2
-                size_hint: 1, .3
+            spacing: dp(20)
+            padding: dp(10)
+            ScoreLabel:
+                text: f'{root.first_player} - score: {root.first_player_score}'
+                pos_hint: {'top': .8}
 
-                Label:
-                    text: root.first_player
-                    halign: "left"
-                    font_size:"46dp"
-                TextInput:
-                    size_hint_x: None
-                    width: 80
-                    font_size:"40dp"
-                    id: score1
-                    halign: "center"
+            ScoreLabel:
+                text: f'{root.second_player} - score: {root.second_player_score}'
+                pos_hint: {'top': .7}
 
-                Label:
-                    text: root.second_player
-                    halign: "left"
-                    font_size:"46dp"
-                TextInput:
-                    size_hint_x: None
-                    width: 80
-                    font_size:"40dp"
-                    id: score2
-                    halign: "center"
-
-            Label:
+            ScoreLabel:
                 id: label1
-                font_size: dp(38)
-                size: self.size
-                halign: "right"
-                text_size: root.width, None
                 text: "{} is X and plays first".format(root.x_player)
-                size_hint: .6,.1
+                pos_hin: {'top': .6}
 
             GridLayout:
+                id: grid
                 spacing: dp(3)
-                padding: dp(3)
                 cols:3
                 rows:3
-                TicTacToeButton:
-                    id:btn1
-                    on_press: btn1.text = root.mark_me()
-                    on_release: Factory.GamePopup().open() if root.check_if_winner() else root.check_if_tie()
-
-                TicTacToeButton:
-                    id:btn2
-                    on_press: btn2.text = root.mark_me()
-                    on_release: Factory.GamePopup().open() if root.check_if_winner() else root.check_if_tie()
-
-                TicTacToeButton:
-                    id:btn3
-                    on_press: btn3.text = root.mark_me()
-                    on_release: Factory.GamePopup().open() if root.check_if_winner() else root.check_if_tie()
-
-                TicTacToeButton:
-                    id:btn4
-                    on_press: btn4.text = root.mark_me()
-                    on_release: Factory.GamePopup().open() if root.check_if_winner() else root.check_if_tie()
-
-                TicTacToeButton:
-                    id:btn5
-                    on_press: btn5.text = root.mark_me()
-                    on_release: Factory.GamePopup().open() if root.check_if_winner() else root.check_if_tie()
-
-                TicTacToeButton:
-                    id:btn6
-                    on_press: btn6.text = root.mark_me()
-                    on_release: Factory.GamePopup().open() if root.check_if_winner() else root.check_if_tie()
-
-                TicTacToeButton:
-                    id:btn7
-                    on_press: btn7.text = root.mark_me()
-                    on_release: Factory.GamePopup().open() if root.check_if_winner() else root.check_if_tie()
-
-                TicTacToeButton:
-                    id:btn8
-                    on_press: btn8.text = root.mark_me()
-                    on_release: Factory.GamePopup().open() if root.check_if_winner() else root.check_if_tie()
-
-                TicTacToeButton:
-                    id:btn9
-                    on_press: btn9.text = root.mark_me()
-                    on_release: Factory.GamePopup().open() if root.check_if_winner() else root.check_if_tie()
 
             PopupButton:
                 text: "Back to start"
                 on_press: root.reset_all()
                 on_press: root.reset_score_players()
                 on_press: app.root.current="first"
-
-
-<TicTacToeButton@Button>
-    font_size: dp(120)
-    text:""
-    disabled_color: 0, 0, 0, .65
-    on_press: self.disabled=True
-
 
 
 <MyPopup@Popup>
@@ -184,6 +111,7 @@ WindowManager:
                 app.root.animate_it(root.ids.label)
                 app.root.animate_me(root)
 
+
 <ErrorPopup@Popup>
     size_hint: (.5,.3)
     title: "Error"
@@ -194,6 +122,7 @@ WindowManager:
         PopupButton:
             text: "Back"
             on_press: app.root.animate_me(root)
+
 
 <GamePopup@Popup>
     auto_dismiss: False
@@ -207,6 +136,7 @@ WindowManager:
             on_press: app.root.reset_all()
             on_release: root.dismiss()
 
+
 <TiePopup@Popup>
     auto_dismiss: False
     size_hint: (.6,.4)
@@ -219,18 +149,18 @@ WindowManager:
             on_press: app.root.reset_all()
             on_release: root.dismiss()
 
-<CoverImage@CoverBehavior+Image>:
-    reference_size: self.texture_size
 
 <PopupLabel@Label>:
     font_size: dp(30)
     halign: "center"
+
 
 <PopupButton@MDTextButton>:
     font_size: dp(35)
     color: (1,1,1,1)
     size_hint: (.4, .25)
     pos_hint: {"center_x":.5}
+
 
 <PopupBoxLayout@BoxLayout>:
     orientation: "vertical"
