@@ -150,8 +150,10 @@ class WindowManager(ScreenManager):
 class TicTacToe(MDApp):
     def __init__(self, **kwargs):
         super(TicTacToe, self).__init__(**kwargs)
-        self.theme_cls.primary_palette = 'Teal'
+        self.theme_cls.primary_palette = 'Orange'
 
 
+x = ['Red', 'Pink', 'Purple', 'DeepPurple', 'Indigo', 'Blue', 'LightBlue', 'Cyan', 'Teal', 'Green', 'LightGreen',
+     'Lime', 'Yellow', 'Amber', 'Orange', 'DeepOrange', 'Brown', 'Gray', 'BlueGray']
 if __name__ == "__main__":
     TicTacToe().run()
